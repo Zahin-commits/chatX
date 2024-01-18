@@ -6,10 +6,17 @@ import { IoIosAdd } from "react-icons/io";
 import { useRef, useState } from "react";
 import {useNavigate} from "react-router-dom"
 import avatar from "../assets/avatar.jpg"
+import { setCredentials } from '../app/authSlice';
+import { useRegisterMutation } from "../features/user/userQuery";
+import { useDispatch, useSelector } from "react-redux";
 
 export const Register = () => {
 
- const naviate = useNavigate();
+ const navigate = useNavigate();
+ const dispatch = useDispatch();
+
+ const {userInfo} = useSelector(state=>state.auth);
+ const [register,{isloading}] = useRegisterMutation();
 
  const [username,setUsername] = useState('');
  const [email,setEmail] = useState('');
@@ -40,11 +47,29 @@ export const Register = () => {
 
   const handleRegister =async(e)=>{
     e.preventDefault();
-   if(username && email && password){
-     setShowPopup(true);
-   }
-   console.log(username , email , password);
-  }
+  try {
+    const res = await register({
+      username,
+      email,
+      password}).unwrap();
+   
+    console.log(res);
+    dispatch(setCredentials({...res})); 
+
+    if(res.sucess){
+      navigate('/');
+    }
+  } catch (error) {
+    //console.log(error?.data?.message || error.error)
+    console.log(error);
+   /*  if(error.data.includes('dup key')){
+      alert('The username or email is already in use.');
+    }else{
+      alert('Something went wrong :(');
+    } */
+    alert('Something went wrong :(');
+  } 
+}
   return (
     <div id="register">
       <span className="skull">
@@ -57,7 +82,7 @@ export const Register = () => {
         <div><FiUser/><input onChange={(e)=>setUsername(e.target.value)} className="text_glow--white" type="text" placeholder="Username"/></div>        
         <div><VscMail/><input onChange={(e)=>setEmail(e.target.value)} className="text_glow--white" type="text" placeholder="Email"/></div>        
         <div><VscLock/><input onChange={(e)=>setPassword(e.target.value)} className="text_glow--white" type="text" placeholder="Password"/></div> 
-        <button type="submit">Register</button>   
+        <button type="submit">{isloading?"Loading...":"Register"}</button>   
       </form>
 
       {showPopup && <div className="selectDp">
@@ -83,7 +108,7 @@ export const Register = () => {
 
         <div className="option_btns">
           <button className="btn_can" onClick={()=>{setShowPopup(false); closePreview();}}>cancel</button>
-          <button className="btn_sel" onClick={()=>{naviate('/')}} >select</button>
+          <button className="btn_sel" onClick={()=>{navigate('/')}} >select</button>
         </div>
       </div>}
     </div>

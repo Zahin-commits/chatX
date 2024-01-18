@@ -7,6 +7,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoute = require('./routers/authRoute');
 const groupRoute = require('./routers/GroupRoute');
+const messageRoute = require('./routers/messageRoute');
 const { protect } = require('./middleware/auth');
 
 connectDB();
@@ -18,7 +19,7 @@ app.use(cookieParser());
 
 app.use(cors({
     credentials: true,
-    origin:"http://localhost:5173"
+    origin:"http://localhost:3006"
 }
 ));
 
@@ -28,6 +29,7 @@ app.get('/',(req,res)=>{
 
 app.use('/auth',authRoute);
 app.use('/group',groupRoute);
+app.use('/message',messageRoute);
 // app.use(protect);
 app.get('/private',protect,(req,res)=>{
  res.json('this is a private route');

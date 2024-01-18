@@ -45,7 +45,14 @@ exports.login = async(req,res,next)=>{
  }
 };
 
-
+exports.getUserList =async(req,res)=>{
+  try {
+    const user = await User.find();
+    res.json(user);
+  } catch (error) {
+    res.status(500).json(error.message);   
+  }
+}
 
 const snedToken = (user,statusCode,res)=>{
     const token = user.getSignedJwtToken();
