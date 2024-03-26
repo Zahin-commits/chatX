@@ -11,37 +11,26 @@ export const userApiSlice =  apiSlice.injectEndpoints({
               }),
               providesTags: ['user'],
         }),
-
-        getUserData: builder.query({
-            query: (username) => ({
-                url: `user/profile/?username=${username}`,
-                credentials:"include"
-              }),
-              providesTags: ['user'],
-        }),
         
-        
-        register:builder.mutation({
+        getAllMsg:builder.mutation({
             query:(data)=>({
-                url: `/auth/register`,
+                url: `/message/get`,
                 body: data,
                 method: 'POST',
                 credentials:"include"  
             })
         }),
         
-        login:builder.mutation({
+        addDmMsg:builder.mutation({
             query:(data)=>({
-                url: `/auth/login`,
+                url: `/message/add`,
                 body: data,
                 method: 'POST',
                 credentials:"include"  
             })
         }),
-
         
     })
 })
 
-export const {useGetUserListQuery ,useGetUserDataQuery,
-    useRegisterMutation,useLoginMutation} = userApiSlice;
+export const {useGetUserListQuery ,useGetAllMsgMutation,useAddDmMsgMutation} = userApiSlice;

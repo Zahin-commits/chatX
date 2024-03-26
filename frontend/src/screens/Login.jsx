@@ -1,24 +1,28 @@
 import { VscMail } from "react-icons/vsc";
 import { VscLock } from "react-icons/vsc";
-import { FiUser } from "react-icons/fi";
 import { GiHarryPotterSkull } from "react-icons/gi";
 import { IoIosAdd } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
 import {useNavigate,Link} from "react-router-dom"
 import avatar from "../assets/avatar.jpg"
 import { setCredentials } from '../app/authSlice';
-import { useRegisterMutation } from "../features/user/userQuery";
+import { useLoginMutation} from "../features/user/userQuery";
 import { useDispatch, useSelector } from "react-redux";
 
-export const Register = () => {
+export const Login = () => {
 
  const navigate = useNavigate();
  const dispatch = useDispatch();
 
  const {userInfo} = useSelector(state=>state.auth);
- const [register,{isloading}] = useRegisterMutation();
+ const [login,{isloading}] = useLoginMutation();
 
- const [username,setUsername] = useState('');
+ useEffect(() => {
+  if(userInfo){
+    navigate('/');
+   }
+ },[navigate,userInfo])
+
  const [email,setEmail] = useState('');
  const [password,setPassword] = useState('');
 
@@ -27,13 +31,6 @@ export const Register = () => {
 
  const [previewImg, setPreviewImg] = useState(avatar);
  const inputRef = useRef('');
-
- 
- useEffect(() => {
-  if(userInfo){
-    navigate('/');
-   }
- },[navigate,userInfo])
 
  const closePreview =()=>{
   inputRef.current.value = ''
@@ -52,11 +49,10 @@ export const Register = () => {
   setIsPpAdded(true);
  }
 
-  const handleRegister =async(e)=>{
+  const handleLogin =async(e)=>{
     e.preventDefault();
   try {
-    const res = await register({
-      username,
+    const res = await login({
       email,
       password}).unwrap();
    
@@ -78,21 +74,19 @@ export const Register = () => {
   } 
 }
   return (
-    <div id="register">
+    <div id="register" className="login">
       <span className="skull">
         <GiHarryPotterSkull/>
       </span>
      
-      <h1 className="text_glow--yellow" >Register</h1>
+      <h1 className="text_glow--yellow" >Login</h1>
  
-      <form onSubmit={e=>{handleRegister(e)}} >
-        <div><FiUser/><input onChange={(e)=>setUsername(e.target.value)} className="text_glow--white" type="text" placeholder="Username"/></div>        
+      <form onSubmit={e=>{handleLogin(e)}} >
         <div><VscMail/><input onChange={(e)=>setEmail(e.target.value)} className="text_glow--white" type="text" placeholder="Email"/></div>        
         <div><VscLock/><input onChange={(e)=>setPassword(e.target.value)} className="text_glow--white" type="text" placeholder="Password"/></div> 
-        <button type="submit">{isloading?"Loading...":"Register"}</button>   
+        <button type="submit">{isloading?"Loading...":"Login"}</button>   
       </form>
-      <span className="link">Already have an account? <Link to={'/login'}>Login</Link></span>
-
+      <span className="link">Don't have an account? <Link to={'/register'}>Register</Link></span>
       {showPopup && <div className="selectDp">
         <div className="pic_container">
           

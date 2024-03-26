@@ -5,11 +5,27 @@
   --clr-bg: #1d1e22;
 }
 
+/* 
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+        body{
+         color: rgb(150, 255, 150);
+         background-color: rgb(25, 25, 25);
+         font-family: "Fira Code", monospace;
+         font-optical-sizing: auto;
+         font-weight: 400;
+         font-style: normal;
+          text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+         text-shadow: 0 0 5px rgba(150, 255, 150, 0.5);
+        }
+        p,h1{
+         filter: blur(0.35px);
+        } */
+
 body{
  background-color: black;
- color: #00FF2B;
- font: 1.3rem 'Space Mono', monospace;
+ color: #00FF2B; 
  text-shadow: 0 0 7px #00ff2acc;
+ font: 1.3rem 'Space Mono', monospace;
 }
 
 #home{
@@ -273,7 +289,7 @@ chat container
  color: white;
  font-size: 20px;
  border: none;
- background-color: black;
+ background-color: transparent;
  outline: none;
  }
 
@@ -406,6 +422,18 @@ chat container
  color: white;
 }
 
+#register span.link{
+  color: white;
+  font-size: 18px;
+  text-shadow: none;
+  opacity: 0.88;
+  margin-top: 8px;
+  filter: blur(0.5px);
+}
+
+#register span.link a{
+  color: #00FF2B;
+}
 
 /*=============
 ANIMATONS

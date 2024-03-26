@@ -48,7 +48,7 @@ exports.login = async(req,res,next)=>{
 exports.getUserList =async(req,res)=>{
   try {
     const user = await User.find();
-    res.json(user);
+    res.json({userList:user,success:true});
   } catch (error) {
     res.status(500).json(error.message);   
   }
