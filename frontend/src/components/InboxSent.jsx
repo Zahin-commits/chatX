@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { useAddDmMsgMutation } from '../features/user/messageQuery';
+import { useSelector } from 'react-redux';
+import { socket } from '../socket';
 
-export const InboxSent = ({to,from}) => {
+export const InboxSent = ({to,from,msgList,setMsgList}) => {
+
+  const {userInfo} = useSelector((state)=>state.auth);
 
   const [addDmMsg,{isLoading}] = useAddDmMsgMutation();
 
@@ -12,7 +16,23 @@ export const InboxSent = ({to,from}) => {
    if(!text) return;
  
   console.log(text);
-  const res = addDmMsg({to,from,text}).unwrap();
+   addDmMsg({to,from,text}).unwrap().then(res=>{
+
+    socket.emit('send-dm-message',{
+      from,
+      to,
+      username:userInfo.username,
+      text
+    }); 
+   });
+
+   const msgs = [...msgList];
+   msgs.push({
+     from,
+     to,
+     text
+   });
+   setMsgList(msgs)
   setText('');
   }
   return (

@@ -3,6 +3,7 @@ import { Message } from './Message';
 import { useGetAllMsgMutation } from '../features/user/messageQuery';
 import { useSelector } from 'react-redux';
 import { InboxSent } from './InboxSent';
+import { socket } from '../socket';
 const avatar = "https://e0.pxfuel.com/wallpapers/116/367/desktop-wallpaper-money-heist-dahli-mask-led-pink-money-heist-dali-thumbnail.jpg";
 
 // const profilePic = "https://e0.pxfuel.com/wallpapers/116/367/desktop-wallpaper-money-heist-dahli-mask-led-pink-money-heist-dali-thumbnail.jpg";
@@ -14,6 +15,7 @@ export const ChatContainer = ({selectedUser,slelectedGroup}) => {
 
   const [getAllMsg,{isLoading}] = useGetAllMsgMutation();
   const [msgList,setMsgList] = useState([]);
+  const [recivedMsg,setRecivedMsg] = useState(null);
 
    const handleGetAllMessage = async(type)=>{
     if(!selectedUser._id) return;
@@ -48,6 +50,30 @@ export const ChatContainer = ({selectedUser,slelectedGroup}) => {
     handleGetAllMessage('inbox');
   },[selectedUser]);
 
+  useEffect(()=>{
+    /* socket.on('message-recived',(data)=>{
+      console.log(data);
+      setRecivedMsg(data);
+    }) */
+    socket.on('msg-recived',(data)=>{
+      console.log(data);
+      setRecivedMsg(data);
+    })
+
+    socket.on('recived-groupMessage',(data)=>{
+      console.log(data);
+      setRecivedMsg(data);
+    })
+  },[socket]);
+
+  useEffect(()=>{
+    if(recivedMsg){
+       setMsgList((prev) => [...prev, recivedMsg]);
+      /*  const newMsgroup = allMsgs.push(recivedMsg);
+       setAllMsgs(newMsgroup); */
+    }
+  },[recivedMsg]);
+
   return (
     <div id='chatContainer'>
     { !selectedUser._id && <span className='placeholder'>select a chat to see messages</span>}
@@ -70,16 +96,21 @@ export const ChatContainer = ({selectedUser,slelectedGroup}) => {
 
             <Message username={'you'} text={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos cupiditate, dolores quibusdam ullam perferendis veniam neque quas, tempora, ipsa deserunt ratione."} />
       */}        {
-              msgList?.map((msg)=>(
+              msgList?.map((msg,index)=>(
                 <Message
-                 key={msg?._id}
+                 key={index}
                  username={selectedUser?.username}
                  fromSender={msg?.from==userInfo._id}
                  text={msg?.text} />
               ))
              }
           </div>
-        <InboxSent to={selectedUser._id} from={userInfo._id} />
+        <InboxSent 
+              to={selectedUser._id} 
+              from={userInfo._id}
+              setMsgList={setMsgList}
+              msgList={msgList}
+         />
       </div>}
 
       

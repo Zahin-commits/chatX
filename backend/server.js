@@ -60,7 +60,7 @@ io.on('connection',(socket)=>{
 
     socket.on('send-dm-message',(data)=>{
      const sendUserSocket = onlineUsers.get(data.to);
-   //  console.log(data);
+     console.log('send-dm',data);
 
      if(sendUserSocket){
        console.log('server recived dm msg',data.text);
