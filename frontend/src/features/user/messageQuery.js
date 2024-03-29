@@ -20,6 +20,15 @@ export const userApiSlice =  apiSlice.injectEndpoints({
                 credentials:"include"  
             })
         }),
+
+        getAllGroupMsg:builder.mutation({
+            query:(data)=>({
+                url: `/group/msg`,
+                body: data,
+                method: 'POST',
+                credentials:"include"  
+            })
+        }),
         
         addDmMsg:builder.mutation({
             query:(data)=>({
@@ -33,4 +42,6 @@ export const userApiSlice =  apiSlice.injectEndpoints({
     })
 })
 
-export const {useGetUserListQuery ,useGetAllMsgMutation,useAddDmMsgMutation} = userApiSlice;
+export const {useGetUserListQuery ,useGetAllMsgMutation,
+              useGetAllGroupMsgMutation,useAddDmMsgMutation
+             } = userApiSlice;
