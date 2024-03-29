@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Message } from './Message';
 import { useGetAllMsgMutation } from '../features/user/messageQuery';
 import { useSelector } from 'react-redux';
@@ -16,6 +16,7 @@ export const ChatContainer = ({selectedUser,slelectedGroup}) => {
   const [getAllMsg,{isLoading}] = useGetAllMsgMutation();
   const [msgList,setMsgList] = useState([]);
   const [recivedMsg,setRecivedMsg] = useState(null);
+  const divUndRef = useRef();
 
    const handleGetAllMessage = async(type)=>{
     if(!selectedUser._id) return;
@@ -36,6 +37,13 @@ export const ChatContainer = ({selectedUser,slelectedGroup}) => {
     setMsgList(res);
    }
   };
+
+  useEffect(()=>{
+    const div = divUndRef.current;
+    if(div){
+      div.scrollIntoView({behavior:'smooth',block:'end'})
+    }
+  },[msgList]);
 
   useEffect(()=>{
   /*   if(selectedUser){
@@ -104,6 +112,7 @@ export const ChatContainer = ({selectedUser,slelectedGroup}) => {
                  text={msg?.text} />
               ))
              }
+             <div ref={divUndRef}></div>
           </div>
         <InboxSent 
               to={selectedUser._id} 
