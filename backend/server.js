@@ -38,6 +38,7 @@ app.get('/',(req,res)=>{
 });
 
 app.use('/auth',authRoute);
+app.use(protect);
 app.use('/group',groupRoute);
 app.use('/message',messageRoute);
 // app.use(protect);
@@ -85,6 +86,7 @@ io.on('connection',(socket)=>{
     // io.to(data.to).emit('recived-groupMessage', { 
     socket.to(data.to).emit('recived-groupMessage', { 
        from:data.from,
+       fromName:data.fromName,
        to:data.to,
        text:data.text
         });

@@ -3,6 +3,7 @@ import { Message } from './Message';
 import { useGetAllGroupMsgMutation, useGetAllMsgMutation } from '../features/user/messageQuery';
 import { useSelector } from 'react-redux';
 import { InboxSent } from './InboxSent';
+import { GroupSent } from './GroupSent';
 import { socket } from '../socket';
 const avatar = "https://e0.pxfuel.com/wallpapers/116/367/desktop-wallpaper-money-heist-dahli-mask-led-pink-money-heist-dali-thumbnail.jpg";
 
@@ -36,6 +37,7 @@ export const ChatContainer = ({selectedUser,selectedGroup}) => {
      }).unwrap();
     //  if (res) return res;
     setMsgList(res);
+    socket.emit('joinGroup', { groupId: selectedGroup?._id, userId: userInfo?._id });
    }
   };
 
@@ -61,6 +63,13 @@ export const ChatContainer = ({selectedUser,selectedGroup}) => {
 
   useEffect(()=>{
     if(selectedGroup){
+      /* const data = handleGetAllMessage('group');
+      //console.log('get msg', data);
+      data.then((res)=>{
+      console.log('res',res);
+      setAllMsgs(res);
+      socket.emit('joinGroup', { groupId: selectedGroup?._id, userId: selectedUser?._id });
+    }); */
       handleGetAllMessage('group');
       console.log('group msg',msgList);
     }
@@ -130,12 +139,12 @@ export const ChatContainer = ({selectedUser,selectedGroup}) => {
          />
       </div>}
 
-      {selectedGroup && <div className='user_chat--container'>
+      {selectedGroup._id && <div className='user_chat--container'>
         <div className='header'>
           <img src={avatar} className="porfile_pic" />  
           <div className='user_info'>
             <p className='username text_glow--white'>{selectedGroup?.name}</p>
-            <span className='status text_glow--white'>memebers:{selectedGroup.members.length}</span>
+            <span className='status text_glow--white'>memebers:{selectedGroup?.members?.length}</span>
           </div>
         </div> 
           <div className="chat_box">
@@ -150,19 +159,19 @@ export const ChatContainer = ({selectedUser,selectedGroup}) => {
               msgList?.map((msg,index)=>(
                 <Message
                  key={index}
-                 username={msg?.from}
+                 username={msg?.fromName || msg?.from}
                  fromSender={msg?.from==userInfo._id}
                  text={msg?.text} />
               ))
              }
              <div ref={divUndRef}></div>
           </div>
-        {/* <InboxSent 
-              to={selectedUser._id} 
+        <GroupSent 
+              to={selectedGroup._id} 
               from={userInfo._id}
               setMsgList={setMsgList}
               msgList={msgList}
-         /> */}
+         />
       </div>}
 
       

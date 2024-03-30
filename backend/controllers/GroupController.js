@@ -49,6 +49,7 @@ exports.addGroupMsg = async(req,res)=>{
        const message = await Message.create({
          text,
          from,
+         fromName:req.user.username,
          to
        });
 

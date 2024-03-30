@@ -7,6 +7,9 @@ const messageSchema = new schema({
         type:String,
         required:true
  },
+ fromName:{
+        type:String,
+ },
 
  to:{
         type:String,
