@@ -49,12 +49,25 @@ body{
 /*======== 
   left bar 
   ========*/
-#home #leftBar{
+
+/* #home #leftBar{
  height: 100vh;
  width: 20%;
  min-width: 220px;
+
+  min-width: 20%; 
+ width: 100%;
  border-right: 2px solid #00ff2aee;
  overflow-x: hidden;
+  display: none; 
+} */
+
+#home #leftBar{
+  height: 100vh;
+  width: 20%;
+  min-width: 220px;
+  border-right: 2px solid #00ff2aee;
+  overflow-x: hidden;
 }
 
 #leftBar>.user{
@@ -97,6 +110,7 @@ chat container
  height: 100vh;
  width: 100%;
  position: relative;
+ /* display: none; */
 }
 
 #home >#chatContainer >.placeholder{
@@ -435,6 +449,40 @@ chat container
 #register span.link a{
   color: #00FF2B;
 }
+
+/*==============
+  meida query
+================*/
+@media (max-width:500px) {
+  #home{
+   position: relative;
+  }
+
+  #home #leftBar{
+   width: 100vw;
+   display: none;
+  }
+
+  #home #leftBar.active{
+   width: 100vw;
+   display: block;
+  }
+
+  #home >#chatContainer{
+    width: 100vw;
+    z-index: 1;
+    border: 2px solid red ;
+    display: none;
+   }
+
+  #home >#chatContainer.active{
+    width: 100vw;
+    z-index: 1;
+    border: 2px solid red ;
+    display: flex;
+   }
+}
+
 
 /*=============
 ANIMATONS

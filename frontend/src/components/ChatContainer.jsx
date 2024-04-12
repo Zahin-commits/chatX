@@ -5,11 +5,12 @@ import { useSelector } from 'react-redux';
 import { InboxSent } from './InboxSent';
 import { GroupSent } from './GroupSent';
 import { socket } from '../socket';
+import useToggleBtn from '../hooks/UseToggleBtn';
 const avatar = "https://e0.pxfuel.com/wallpapers/116/367/desktop-wallpaper-money-heist-dahli-mask-led-pink-money-heist-dali-thumbnail.jpg";
 
 // const profilePic = "https://e0.pxfuel.com/wallpapers/116/367/desktop-wallpaper-money-heist-dahli-mask-led-pink-money-heist-dali-thumbnail.jpg";
 
-export const ChatContainer = ({selectedUser,selectedGroup}) => {
+export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) => {
 
   // console.log('selected user ',selectedUser);
   const {userInfo} = useSelector((state)=>state.auth);
@@ -19,6 +20,9 @@ export const ChatContainer = ({selectedUser,selectedGroup}) => {
   const [msgList,setMsgList] = useState([]);
   const [recivedMsg,setRecivedMsg] = useState(null);
   const divUndRef = useRef();
+
+  const {toggleOn,toggleOff} = useToggleBtn('#chatContainer');
+  const {toggleOn:showLeftbar,toggleOff:hideLeftbar} = useToggleBtn('#leftBar');
 
    const handleGetAllMessage = async(type)=>{
     if(!selectedUser._id && !selectedGroup._id) return;
@@ -58,7 +62,10 @@ export const ChatContainer = ({selectedUser,selectedGroup}) => {
       setAllMsgs(res);
     });
     } */
-    handleGetAllMessage('inbox');
+    if(selectedUser){
+    //  setGroup(null);
+      handleGetAllMessage('inbox');
+    }
   },[selectedUser]);
 
   useEffect(()=>{
@@ -70,6 +77,7 @@ export const ChatContainer = ({selectedUser,selectedGroup}) => {
       setAllMsgs(res);
       socket.emit('joinGroup', { groupId: selectedGroup?._id, userId: selectedUser?._id });
     }); */
+     //  setUser([]);
       handleGetAllMessage('group');
       console.log('group msg',msgList);
     }
@@ -101,11 +109,12 @@ export const ChatContainer = ({selectedUser,selectedGroup}) => {
 
   return (
     <div id='chatContainer'>
-    { (!selectedUser._id && !selectedGroup._id)&& <span className='placeholder'>select a chat to see messages</span>}
+    { (!selectedUser?._id && !selectedGroup?._id)&& <span className='placeholder'>select a chat to see messages</span>}
     
-    {selectedUser._id && 
+    {selectedUser?._id && 
       <div className='user_chat--container'>
         <div className='header'>
+          <button onClick={()=>{toggleOff(); showLeftbar();}} >←</button>
           <img src={selectedUser?.profilePic || avatar} className="porfile_pic" />  
           <div className='user_info'>
             <p className='username text_glow--white'>{selectedUser?.username}</p>
@@ -139,7 +148,7 @@ export const ChatContainer = ({selectedUser,selectedGroup}) => {
          />
       </div>}
 
-      {selectedGroup._id && <div className='user_chat--container'>
+      {selectedGroup?._id && <div className='user_chat--container'>
         <div className='header'>
           <img src={avatar} className="porfile_pic" />  
           <div className='user_info'>

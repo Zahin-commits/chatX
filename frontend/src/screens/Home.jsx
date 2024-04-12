@@ -22,7 +22,10 @@ export const Home = () => {
   return (
     <div id='home'>
       <LeftBar setSelectedUser={setSelectedUser} setSelectedGroup={setSelectedGroup} />
-      <ChatContainer selectedUser={selectedUser} selectedGroup={selectedGroup} />
+      <ChatContainer 
+        selectedUser={selectedUser} selectedGroup={selectedGroup} 
+        setUser={setSelectedUser} setGroup={setSelectedGroup} 
+      />
     </div>
   )
 }
