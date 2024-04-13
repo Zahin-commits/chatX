@@ -11,18 +11,19 @@ const { protect } = require('./middleware/auth');
 const {createServer} = require('http');
 const {Server} = require('socket.io');
 const connectDB = require('./config/db');
-
+// const link = "http://localhost:3006";
+const link = "https://chat-x-gamma.vercel.app";
 connectDB();
 
 const server = createServer(app);
 const io = new Server(server,{
     cors: {
-      origin: "http://localhost:3006"
+      origin: link
     }
   });
 
 app.use(cors({
- origin:'http://localhost:3006',
+ origin:link,
  credentials:true
 }))
 
