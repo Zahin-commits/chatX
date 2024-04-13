@@ -25,7 +25,7 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
   const {toggleOn:showLeftbar,toggleOff:hideLeftbar} = useToggleBtn('#leftBar');
 
    const handleGetAllMessage = async(type)=>{
-    if(!selectedUser._id && !selectedGroup._id) return;
+    if(!selectedUser?._id && !selectedGroup?._id) return;
 
      if(type=="inbox"){
      const res = await getAllMsg({
@@ -62,14 +62,17 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
       setAllMsgs(res);
     });
     } */
-    if(selectedUser){
-    //  setGroup(null);
+    if(selectedUser?._id){
+      setGroup(null);
       handleGetAllMessage('inbox');
     }
+    /* if(selectedUser){
+      handleGetAllMessage('inbox');
+    } */
   },[selectedUser]);
 
   useEffect(()=>{
-    if(selectedGroup){
+   // if(selectedGroup){
       /* const data = handleGetAllMessage('group');
       //console.log('get msg', data);
       data.then((res)=>{
@@ -77,7 +80,13 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
       setAllMsgs(res);
       socket.emit('joinGroup', { groupId: selectedGroup?._id, userId: selectedUser?._id });
     }); */
-     //  setUser([]);
+
+    /*  if(selectedGroup){
+      handleGetAllMessage('group');
+      console.log('group msg',msgList);
+    } */
+     if(selectedGroup?._id){
+      setUser(null);
       handleGetAllMessage('group');
       console.log('group msg',msgList);
     }
@@ -102,8 +111,7 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
   useEffect(()=>{
     if(recivedMsg){
        setMsgList((prev) => [...prev, recivedMsg]);
-      /*  const newMsgroup = allMsgs.push(recivedMsg);
-       setAllMsgs(newMsgroup); */
+     
     }
   },[recivedMsg]);
 
@@ -114,7 +122,7 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
     {selectedUser?._id && 
       <div className='user_chat--container'>
         <div className='header'>
-          <button onClick={()=>{toggleOff(); showLeftbar();}} >←</button>
+          <button className='back_btn' onClick={()=>{toggleOff(); showLeftbar();}} >←</button>
           <img src={selectedUser?.profilePic || avatar} className="porfile_pic" />  
           <div className='user_info'>
             <p className='username text_glow--white'>{selectedUser?.username}</p>
@@ -122,14 +130,7 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
           </div>
         </div> 
           <div className="chat_box">
-          {/*    <Message username={selectedUser?.username} text={"this is a user text"} />
-             
-             <Message username={selectedUser?.username} text={"tLorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos cupiditate, dolores quibusdam ullam perferendis veniam neque quas, tempora, ipsa deserunt ratione rem omnis adipisci praesentium quia. Perspiciatis, dolorem delectus? Voluptatum!t"} />
-
-            <Message username={selectedUser?.username} text={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, veritatis."} />
-
-            <Message username={'you'} text={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos cupiditate, dolores quibusdam ullam perferendis veniam neque quas, tempora, ipsa deserunt ratione."} />
-      */}        {
+               {
               msgList?.map((msg,index)=>(
                 <Message
                  key={index}
@@ -150,6 +151,7 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
 
       {selectedGroup?._id && <div className='user_chat--container'>
         <div className='header'>
+        <button className='back_btn' onClick={()=>{toggleOff(); showLeftbar();}} >←</button>
           <img src={avatar} className="porfile_pic" />  
           <div className='user_info'>
             <p className='username text_glow--white'>{selectedGroup?.name}</p>
@@ -157,14 +159,7 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
           </div>
         </div> 
           <div className="chat_box">
-          {/*    <Message username={selectedUser?.username} text={"this is a user text"} />
-             
-             <Message username={selectedUser?.username} text={"tLorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos cupiditate, dolores quibusdam ullam perferendis veniam neque quas, tempora, ipsa deserunt ratione rem omnis adipisci praesentium quia. Perspiciatis, dolorem delectus? Voluptatum!t"} />
-
-            <Message username={selectedUser?.username} text={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, veritatis."} />
-
-            <Message username={'you'} text={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos cupiditate, dolores quibusdam ullam perferendis veniam neque quas, tempora, ipsa deserunt ratione."} />
-      */}        {
+              {
               msgList?.map((msg,index)=>(
                 <Message
                  key={index}

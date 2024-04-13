@@ -21,12 +21,13 @@ export const LeftBar = ({setSelectedUser,setSelectedGroup}) => {
      {isLoading&&<p>Loading...</p>}
      {data?.userList?.map((user,index)=>(
       <User key={index} user={user} setChat={setSelectedUser}
-      toggleOn={toggleOn} toggleOff={toggleOff} 
-      showLeftbar={showLeftbar} hideLeftbar={hideLeftbar}
+      toggleOn={toggleOn} hideLeftbar={hideLeftbar}
       />
      ))}
      {groupData?.groupList?.map((group,index)=>(
-      <Group key={index} group={group} setChat={setSelectedGroup}/>
+      <Group key={index} group={group} setChat={setSelectedGroup}
+      toggleOn={toggleOn} hideLeftbar={hideLeftbar}
+      />
      ))}
 
        

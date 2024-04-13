@@ -46,6 +46,10 @@ body{
   text-shadow: 0 0 5px #ffffffbd;
 }
 
+.back_btn{
+ display: none;
+}
+
 /*======== 
   left bar 
   ========*/
@@ -456,6 +460,10 @@ chat container
 @media (max-width:500px) {
   #home{
    position: relative;
+  }
+
+  .back_btn{
+   display: inline-block;
   }
 
   #home #leftBar{

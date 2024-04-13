@@ -1,6 +1,6 @@
 import React from 'react'
 const avatar = "https://e0.pxfuel.com/wallpapers/116/367/desktop-wallpaper-money-heist-dahli-mask-led-pink-money-heist-dali-thumbnail.jpg";
-export const User = ({user,setChat,toggleOn,toggleOff, showLeftbar , hideLeftbar}) => {
+export const User = ({user,setChat,toggleOn,hideLeftbar}) => {
   //console.log(user);
   return (
     <div className='user' onClick={()=>{setChat(user); toggleOn(); hideLeftbar();}} >
