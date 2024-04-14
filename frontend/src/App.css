@@ -190,7 +190,8 @@ chat container
  flex-direction: column;
  align-items: start;
  height: calc(100vh - 125px);
- overflow-y: scroll;
+ overflow-y: auto;
+ scroll-behavior: smooth;
 }
 
 #home >#chatContainer >.user_chat--container .chat_box .message{

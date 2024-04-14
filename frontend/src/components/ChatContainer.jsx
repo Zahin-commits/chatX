@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Message } from './Message';
 import { useGetAllGroupMsgMutation, useGetAllMsgMutation } from '../features/user/messageQuery';
 import { useSelector } from 'react-redux';
@@ -19,7 +19,9 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
   const [getAllGroupMsg,{isLoading:isGMLoading}] = useGetAllGroupMsgMutation();
   const [msgList,setMsgList] = useState([]);
   const [recivedMsg,setRecivedMsg] = useState(null);
+
   const divUndRef = useRef();
+  const chatContainerRef = useRef();
 
   const {toggleOn,toggleOff} = useToggleBtn('#chatContainer');
   const {toggleOn:showLeftbar,toggleOff:hideLeftbar} = useToggleBtn('#leftBar');
@@ -46,45 +48,43 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
   };
 
   useEffect(()=>{
-    const div = divUndRef.current;
-    if(div){
-      div.scrollIntoView({behavior:'smooth',block:'end'})
+   
+     const div = divUndRef.current;
+      if(div){
+       div.scrollIntoView({behavior:'smooth',block:'end'});
+       console.log('div ref');
+     }
+   // console.log('div',div);
+   
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      console.log('triggered scrool');
     }
+    console.log('msglist triggered');
+  },[msgList, divUndRef.current]);
+
+  useLayoutEffect(()=>{
+   
+     const div = divUndRef.current;
+      if(div){
+       div.scrollIntoView({behavior:'smooth',block:'end'});
+     //  console.log('div ref');
+     }
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      console.log('triggered scrool');
+    }
+    console.log('msglist triggered');
   },[msgList]);
 
   useEffect(()=>{
-  /*   if(selectedUser){
-      setSelectedGroup(null);
-      const data = handleGetAllMessage('inbox');
-      //console.log('get msg', data);
-      data.then((res)=>{
-      console.log('res',res);
-      setAllMsgs(res);
-    });
-    } */
     if(selectedUser?._id){
       setGroup(null);
       handleGetAllMessage('inbox');
     }
-    /* if(selectedUser){
-      handleGetAllMessage('inbox');
-    } */
   },[selectedUser]);
 
   useEffect(()=>{
-   // if(selectedGroup){
-      /* const data = handleGetAllMessage('group');
-      //console.log('get msg', data);
-      data.then((res)=>{
-      console.log('res',res);
-      setAllMsgs(res);
-      socket.emit('joinGroup', { groupId: selectedGroup?._id, userId: selectedUser?._id });
-    }); */
-
-    /*  if(selectedGroup){
-      handleGetAllMessage('group');
-      console.log('group msg',msgList);
-    } */
      if(selectedGroup?._id){
       setUser(null);
       handleGetAllMessage('group');
@@ -93,10 +93,6 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
   },[selectedGroup])
 
   useEffect(()=>{
-    /* socket.on('message-recived',(data)=>{
-      console.log(data);
-      setRecivedMsg(data);
-    }) */
     socket.on('msg-recived',(data)=>{
       console.log(data);
       setRecivedMsg(data);
@@ -129,7 +125,7 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
             <span className='status text_glow--white'>online</span>
           </div>
         </div> 
-          <div className="chat_box">
+          <div className="chat_box" ref={chatContainerRef}>
                {
               msgList?.map((msg,index)=>(
                 <Message
@@ -139,7 +135,7 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
                  text={msg?.text} />
               ))
              }
-             <div ref={divUndRef}></div>
+             <div id='divRef' ref={divUndRef}></div>
           </div>
         <InboxSent 
               to={selectedUser._id} 
@@ -158,7 +154,7 @@ export const ChatContainer = ({selectedUser,selectedGroup, setUser, setGroup}) =
             <span className='status text_glow--white'>memebers:{selectedGroup?.members?.length}</span>
           </div>
         </div> 
-          <div className="chat_box">
+          <div className="chat_box"  ref={chatContainerRef}>
               {
               msgList?.map((msg,index)=>(
                 <Message
